@@ -2,7 +2,7 @@ package com.colombo.choresmanager.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Date
+import java.time.LocalDateTime
 
 @Entity
 data class Chore(
@@ -10,5 +10,6 @@ data class Chore(
     var id: Int = 0,
     var name: String,
     var intervalDays: Int,
-    var lastDoneAt: Date
+    var lastDoneAt: LocalDateTime,
+    var createdAt: LocalDateTime = LocalDateTime.now(),
 )

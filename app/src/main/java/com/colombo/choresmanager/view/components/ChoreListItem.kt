@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.colombo.choresmanager.R
 import com.colombo.choresmanager.model.Chore
+import java.time.Duration
+import java.time.LocalDateTime
 
 @Composable
 fun ChoreListItem(chore: Chore, onDelete: () -> Unit) {
@@ -27,7 +30,7 @@ fun ChoreListItem(chore: Chore, onDelete: () -> Unit) {
             .fillMaxWidth()
             .padding(8.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.primary)
+            .background(MaterialTheme.colorScheme.surfaceBright)
             .padding(16.dp)
     ) {
         Column (modifier = Modifier.weight(1f)) {
@@ -41,6 +44,12 @@ fun ChoreListItem(chore: Chore, onDelete: () -> Unit) {
                 fontSize = 20.sp,
                 color = Color.White
             )
+            LinearProgressIndicator(progress = { 1f - (
+                Duration.between(
+                    chore.lastDoneAt,
+                    LocalDateTime.now()
+                ).seconds.toFloat() / Duration.ofDays(chore.intervalDays.toLong()).seconds.toFloat()
+            ).coerceIn(0f, 1f)})
         }
 
         IconButton(onClick = onDelete) {
