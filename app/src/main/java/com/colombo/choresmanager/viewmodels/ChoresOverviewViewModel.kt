@@ -11,18 +11,24 @@ import java.time.LocalDateTime
 
 class ChoresOverviewViewModel : ViewModel() {
 
-    val choreDao = MainApplication.choreDatabase.getChoreDao()
+    private val choreDao = MainApplication.choreDatabase.getChoreDao()
     val choreList : LiveData<List<Chore>> = choreDao.getAllChores()
 
-    fun addChore(title: String) {
+    fun addChore(title: String, interval: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            choreDao.addChore(Chore(name = title, intervalDays = 7, lastDoneAt = LocalDateTime.now()))
+            choreDao.addChore(Chore(name = title, intervalDays = interval, lastDoneAt = LocalDateTime.now()))
         }
     }
 
     fun deleteChore(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             choreDao.deleteChore(id)
+        }
+    }
+
+    fun completeChore(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            choreDao.updateLastDoneAt(id, LocalDateTime.now())
         }
     }
 }

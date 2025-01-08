@@ -1,72 +1,78 @@
 package com.colombo.choresmanager.view.pages
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.colombo.choresmanager.view.components.ChoreListItem
+import com.colombo.choresmanager.view.components.CreationDialog
+import com.colombo.choresmanager.view.components.FloatingAddButton
 import com.colombo.choresmanager.viewmodels.ChoresOverviewViewModel
 
 @Composable
 fun ChoresOverviewPage(viewModel: ChoresOverviewViewModel) {
     val choresList by viewModel.choreList.observeAsState()
-    var inputText by remember { mutableStateOf("") }
+    val openCreationDialog = remember { mutableStateOf(false) }
 
-    Column (
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(8.dp)
-    ) {
-        Row (
+    Scaffold (
+        floatingActionButton = { FloatingAddButton(onClick = {
+            openCreationDialog.value = true
+        }) },
+        floatingActionButtonPosition = FabPosition.End
+    ) { innerpadding ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
+                .fillMaxHeight()
+                .padding(innerpadding)
+                .padding(16.dp),
         ) {
-            OutlinedTextField(
-                modifier = Modifier.weight(1f),
-                value = inputText,
-                onValueChange = { inputText = it }
-            )
-
-            ElevatedButton (onClick = {
-                viewModel.addChore(inputText)
-                inputText = ""
-            }) {
-                Text(text = "Add")
-            }
-        }
-
-        choresList?.let {
-            LazyColumn (
-                content = {
-                    itemsIndexed (it) { index, chore ->
-                        ChoreListItem(chore = chore, onDelete = { viewModel.deleteChore(chore.id) })
+            choresList?.sortedBy { it.lastDoneAt.plusDays(it.intervalDays.toLong()) }?.let {
+                LazyColumn(
+                    content = {
+                        itemsIndexed(it) { index, chore ->
+                            ChoreListItem(
+                                chore = chore,
+                                onDelete = { viewModel.deleteChore(chore.id) },
+                                onComplete = { viewModel.completeChore(chore.id) }
+                            )
+                        }
                     }
-                }
+                )
+            } ?: Text(
+                text = "No chores yet",
+                modifier = Modifier.fillMaxWidth(),
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center
             )
-        }?: Text(
-            text = "No chores yet",
-            modifier = Modifier.fillMaxWidth(),
-            fontSize = 16.sp,
-            textAlign = TextAlign.Center
-        )
+        }
+    }
+
+    /* *** Dialogs *** */
+
+    when {
+        openCreationDialog.value -> {
+            CreationDialog (
+                onDismiss = { openCreationDialog.value = false },
+                onCreate = { name, interval ->
+                    viewModel.addChore(name, interval)
+                    openCreationDialog.value = false
+                },
+            )
+        }
     }
 }
+
