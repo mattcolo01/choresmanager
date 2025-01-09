@@ -1,5 +1,6 @@
 package com.colombo.choresmanager.view.pages
 
+import AdListItem
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,6 +45,9 @@ fun ChoresOverviewPage(viewModel: ChoresOverviewViewModel) {
                 LazyColumn(
                     content = {
                         itemsIndexed(it) { index, chore ->
+                            if (index % 10 == 3) {
+                                AdListItem()
+                            }
                             ChoreListItem(
                                 chore = chore,
                                 onDelete = { viewModel.deleteChore(chore.id) },
@@ -67,7 +71,7 @@ fun ChoresOverviewPage(viewModel: ChoresOverviewViewModel) {
         openCreationDialog.value -> {
             CreationDialog (
                 onDismiss = { openCreationDialog.value = false },
-                onCreate = { name, interval ->
+                onCreate = { name, interval, _ ->
                     viewModel.addChore(name, interval)
                     openCreationDialog.value = false
                 },
