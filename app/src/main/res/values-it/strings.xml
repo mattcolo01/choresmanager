@@ -24,4 +24,9 @@
     <string name="deletion_confirm_title">Sei sicuro di volerlo eliminare?</string>
     <string name="deletion_confirm_body">Se lo fai per sbaglio, non succede nulla di male. Dovrai soltanto ricrearlo.</string>
     <string name="done_at">"Fatto il "</string>
+    <string name="channel_name">Promemoria</string>
+    <string name="channel_description">Promemoria di mestieri da fare a breve</string>
+    <string name="almost_time_to">"A breve bisognerà fare "</string>
+    <string name="dont_want_to">So che non vorresti farlo, ma devi. Mi dispiace.</string>
+    <string name="snooze_default">Ricordamelo domani</string>
 </resources>

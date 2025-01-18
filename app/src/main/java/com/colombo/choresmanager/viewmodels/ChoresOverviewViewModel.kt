@@ -1,6 +1,7 @@
 package com.colombo.choresmanager.viewmodels
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.colombo.choresmanager.MainApplication
@@ -17,14 +18,16 @@ class ChoresOverviewViewModel : ViewModel() {
     private val choreDao = MainApplication.choreDatabase.getChoreDao()
     val choreList : LiveData<List<Chore>> = choreDao.getAllChores()
 
-    fun addChore(title: String, interval: Int, date: Long) {
+    fun addChore(title: String, interval: Int, date: Long): MutableLiveData<Int> {
+        val id = MutableLiveData<Int>()
         viewModelScope.launch(Dispatchers.IO) {
-            choreDao.addChore(Chore(
+            id.postValue(choreDao.addChore(Chore(
                 name = title,
                 intervalDays = interval,
                 lastDoneAt = ZonedDateTime.ofInstant(Instant.ofEpochSecond(date), ZoneOffset.systemDefault())
-            ))
+            )).toInt())
         }
+        return id
     }
 
     fun deleteChore(id: Int) {
@@ -33,9 +36,16 @@ class ChoresOverviewViewModel : ViewModel() {
         }
     }
 
-    fun completeChore(id: Int) {
+    fun completeChore(id: Int): MutableLiveData<Int> {
+        val idWhenCompleted = MutableLiveData<Int>()
         viewModelScope.launch(Dispatchers.IO) {
             choreDao.updateLastDoneAt(id, LocalDateTime.now())
+            idWhenCompleted.postValue(id)
         }
+        return idWhenCompleted
+    }
+
+    fun getChore(id: Int): LiveData<Chore> {
+        return choreDao.getChoreById(id)
     }
 }

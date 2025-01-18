@@ -3,6 +3,7 @@ package com.colombo.choresmanager.view.pages
 import AdListItem
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.MutableLiveData
 import com.colombo.choresmanager.R
 import com.colombo.choresmanager.view.components.ChoreListItem
 import com.colombo.choresmanager.view.components.FloatingAddButton
@@ -41,7 +43,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ChoresOverviewPage(
     viewModel: ChoresOverviewViewModel,
-    showInterstitialAd: () -> Unit
+    showInterstitialAd: () -> Unit,
+    scheduleNotificationForChore: (MutableLiveData<Int>) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -67,6 +70,7 @@ fun ChoresOverviewPage(
                 )
             }
        },
+        modifier = Modifier.fillMaxSize(),
     ) { innerpadding ->
         Column(
             modifier = Modifier
@@ -84,7 +88,7 @@ fun ChoresOverviewPage(
                             ChoreListItem(
                                 chore = chore,
                                 onDelete = { choreFlaggedForDeletion.intValue = chore.id },
-                                onComplete = { viewModel.completeChore(chore.id) }
+                                onComplete = { scheduleNotificationForChore(viewModel.completeChore(chore.id)) }
                             )
                         }
 
@@ -118,7 +122,7 @@ fun ChoresOverviewPage(
                     onCreate = { name, interval, date ->
                         openCreationDialog.value = false
                         showInterstitialAd()
-                        viewModel.addChore(name, interval, date)
+                        scheduleNotificationForChore(viewModel.addChore(name, interval, date))
                     },
                     onError = { message ->
                         openCreationDialog.value = false
@@ -145,4 +149,3 @@ fun ChoresOverviewPage(
         }
     }
 }
-

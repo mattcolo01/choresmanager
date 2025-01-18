@@ -23,4 +23,9 @@
     <string name="deletion_confirm_title">Are you sure you want to delete this?</string>
     <string name="deletion_confirm_body">If you do it accidentally, nothing bad happens. You will only have to create it again.</string>
     <string name="done_at">"Done at "</string>
+    <string name="channel_name">Memos</string>
+    <string name="channel_description">Memos about incoming chores</string>
+    <string name="almost_time_to">It\'s almost time to do</string>
+    <string name="dont_want_to">I know you don\'t want to, but you have to. Sorry.</string>
+    <string name="snooze_default">Remind me tomorrow</string>
 </resources>
