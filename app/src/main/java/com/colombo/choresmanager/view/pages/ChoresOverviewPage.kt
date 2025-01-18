@@ -121,6 +121,7 @@ fun ChoresOverviewPage(
                         viewModel.addChore(name, interval, date)
                     },
                     onError = { message ->
+                        openCreationDialog.value = false
                         scope.launch {
                             snackbarHostState.showSnackbar(
                                 message = message,

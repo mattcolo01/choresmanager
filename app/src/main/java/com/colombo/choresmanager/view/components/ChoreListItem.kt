@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -46,21 +47,52 @@ fun ChoreListItem(
     onDelete: () -> Unit,
     onComplete: () -> Unit
 ) {
-    var isFlashing by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    val infiniteTransition = rememberInfiniteTransition(label = "backgroundFlashing")
-    val backgroundColor by infiniteTransition.animateColor(
-        initialValue = MaterialTheme.colorScheme.surfaceContainerHigh,
-        targetValue = if (isFlashing) Color.Red else MaterialTheme.colorScheme.surfaceContainerHigh,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000),
-            repeatMode = RepeatMode.Reverse
-        ), label = "colorAnimation"
-    )
+    val cardDefaultBackground = MaterialTheme.colorScheme.surfaceContainerHigh
+    val defaultBarColor = MaterialTheme.colorScheme.onSurface
 
-    LaunchedEffect(Unit) {
-        isFlashing = true
+    val timeSinceLastCompletion = Duration.between(
+        chore.lastDoneAt,
+        ZonedDateTime.now()
+    )
+    val timeBetweenCompletions = Duration.ofDays(chore.intervalDays.toLong())
+    val animateBackground = (timeBetweenCompletions.seconds - timeSinceLastCompletion.seconds) <= 0
+    val animateBar = (timeBetweenCompletions.seconds - timeSinceLastCompletion.seconds) in 0..(3600 * 24)
+
+    var isFlashing by remember { mutableStateOf(false) }
+    val infiniteTransition = rememberInfiniteTransition(label = "backgroundFlashing")
+
+    if (animateBackground || animateBar) {
+        LaunchedEffect(Unit) {
+            isFlashing = true
+        }
     }
+
+    val backgroundColor by
+        if (animateBackground)
+            infiniteTransition.animateColor(
+                initialValue = MaterialTheme.colorScheme.surfaceContainerHigh,
+                targetValue = if (isFlashing) Color.Red else MaterialTheme.colorScheme.surfaceContainerHigh,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(1000),
+                    repeatMode = RepeatMode.Reverse
+                ), label = "colorAnimation"
+            )
+        else
+            remember { mutableStateOf(cardDefaultBackground) }
+
+    val barColor by
+        if (animateBar)
+            infiniteTransition.animateColor(
+                initialValue = MaterialTheme.colorScheme.onSurface,
+                targetValue = if (isFlashing) Color.Red else MaterialTheme.colorScheme.onSurface,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(1000),
+                    repeatMode = RepeatMode.Reverse
+                ), label = "colorAnimation"
+            )
+        else
+            remember { mutableStateOf(defaultBarColor) }
 
     ElevatedCard (
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
@@ -68,7 +100,7 @@ fun ChoreListItem(
             .fillMaxWidth()
             .padding(8.dp)
             .clip(RoundedCornerShape(16.dp)),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
+        colors = CardDefaults.cardColors(containerColor = backgroundColor)
     ) {
         Row (
             modifier = Modifier
@@ -88,18 +120,17 @@ fun ChoreListItem(
                 LinearProgressIndicator(
                     progress = {
                         1f - (
-                                Duration.between(
-                                    chore.lastDoneAt,
-                                    ZonedDateTime.now()
-                                ).seconds.toFloat() / Duration.ofDays(chore.intervalDays.toLong()).seconds.toFloat()
+                                timeSinceLastCompletion.seconds.toFloat() / timeBetweenCompletions.seconds.toFloat()
                         ).coerceIn(0f, 1f)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                        .clip(RoundedCornerShape(8.dp)),
+                        .padding(vertical = 8.dp),
                     trackColor = MaterialTheme.colorScheme.surface,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = barColor,
+                    drawStopIndicator = { },
+                    strokeCap = StrokeCap.Round,
+                    gapSize = 4.dp
                 )
                 Row (
                     modifier = Modifier.fillMaxWidth(),
