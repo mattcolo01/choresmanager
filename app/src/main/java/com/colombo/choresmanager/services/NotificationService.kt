@@ -8,14 +8,17 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import com.colombo.choresmanager.R
 import com.colombo.choresmanager.utils.DEFAULT_CHANNEL_ID
 import com.colombo.choresmanager.viewmodels.ChoresOverviewViewModel
+import com.colombo.choresmanager.viewmodels.ViewModelFactory
 
 class NotificationService(private val context: Context) {
-    private val choresOverviewViewModel: ChoresOverviewViewModel = context.getSystemService(ChoresOverviewViewModel::class.java)
 
     fun sendReminderNotification(choreId: Int) {
+        val choresOverviewViewModel = ViewModelProvider(context as ViewModelStoreOwner, ViewModelFactory())[ChoresOverviewViewModel::class.java]
         val chore = choresOverviewViewModel.getChore(choreId).value
         if (chore == null) {
             Log.w("NotificationService", "Chore not found, it may have been deleted")

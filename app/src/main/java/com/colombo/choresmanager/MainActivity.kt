@@ -17,7 +17,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import com.colombo.choresmanager.receivers.ReminderReceiver
+import com.colombo.choresmanager.receivers.IntentReceiver
 import com.colombo.choresmanager.ui.theme.ChoresManagerTheme
 import com.colombo.choresmanager.utils.DEFAULT_CHANNEL_ID
 import com.colombo.choresmanager.view.pages.ChoresOverviewPage
@@ -110,9 +110,8 @@ class MainActivity : ComponentActivity() {
             val sub = choresOverviewViewModel!!.getChore(id)
             sub.observe(this) {
                 sub.removeObservers(this)
-                Log.e("MainActivity", "Scheduling notification for chore: $id")
 
-                val intent = Intent(this, ReminderReceiver::class.java)
+                val intent = Intent(this, IntentReceiver::class.java)
                 intent.putExtra("choreId", id)
                 val pendingIntent = PendingIntent.getBroadcast(
                     this,

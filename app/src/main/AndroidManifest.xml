@@ -29,7 +29,7 @@
         </activity>
 
         <receiver
-            android:name=".receivers.ReminderReceiver"
+            android:name=".receivers.IntentReceiver"
             android:enabled="true" />
 
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
