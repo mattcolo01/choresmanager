@@ -1,5 +1,11 @@
 package com.colombo.choresmanager.view.components
 
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,16 +19,25 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.colombo.choresmanager.R
 import com.colombo.choresmanager.model.Chore
+import com.colombo.choresmanager.utils.getChoreIntervalOptions
 import java.time.Duration
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -31,13 +46,29 @@ fun ChoreListItem(
     onDelete: () -> Unit,
     onComplete: () -> Unit
 ) {
+    var isFlashing by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val infiniteTransition = rememberInfiniteTransition(label = "backgroundFlashing")
+    val backgroundColor by infiniteTransition.animateColor(
+        initialValue = MaterialTheme.colorScheme.surfaceContainerHigh,
+        targetValue = if (isFlashing) Color.Red else MaterialTheme.colorScheme.surfaceContainerHigh,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000),
+            repeatMode = RepeatMode.Reverse
+        ), label = "colorAnimation"
+    )
+
+    LaunchedEffect(Unit) {
+        isFlashing = true
+    }
+
     ElevatedCard (
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clip(RoundedCornerShape(16.dp)),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
     ) {
         Row (
             modifier = Modifier
@@ -59,37 +90,45 @@ fun ChoreListItem(
                         1f - (
                                 Duration.between(
                                     chore.lastDoneAt,
-                                    LocalDateTime.now()
+                                    ZonedDateTime.now()
                                 ).seconds.toFloat() / Duration.ofDays(chore.intervalDays.toLong()).seconds.toFloat()
                         ).coerceIn(0f, 1f)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    trackColor = MaterialTheme.colorScheme.surface,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
-                Text(
-                    text = "Days: ${chore.intervalDays}",
-                    fontSize = 10.sp,
-                    color = MaterialTheme.colorScheme.surfaceTint
-                )
-                Text(
-                    text = "Last: ${chore.lastDoneAt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))}",
-                    fontSize = 10.sp,
-                    color = MaterialTheme.colorScheme.surfaceTint
-                )
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = getChoreIntervalOptions(context).find { it.first == chore.intervalDays }?.second ?: "",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.surfaceTint
+                    )
+                    Text(
+                        text = stringResource(R.string.done_at) + chore.lastDoneAt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.surfaceTint
+                    )
+                }
             }
 
             IconButton(onClick = onComplete) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_done_24),
-                    contentDescription = "Complete",
+                    contentDescription = stringResource(R.string.complete),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
             IconButton(onClick = onDelete) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_delete_24),
-                    contentDescription = "Delete",
+                    contentDescription = stringResource(R.string.delete),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }

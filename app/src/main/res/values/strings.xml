@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Chores Manager</string>
+    <string name="no_chores">No chores yet</string>
+    <string name="complete">Complete</string>
+    <string name="delete">Delete</string>
+    <string name="create_chore">Create a new chore</string>
+    <string name="name">Name</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
+    <string name="required_fields">Please fill in all fields</string>
+    <string name="required_date">Please select a date</string>
+    <string name="ok">OK</string>
+    <string name="when_last_done">When did you last do it?</string>
+    <string name="frequency">Frequency</string>
+    <string name="every_day">Every day</string>
+    <string name="every_other_day">Every other day</string>
+    <string name="every_3_days">Every 3 days</string>
+    <string name="every_week">Every week</string>
+    <string name="every_2_weeks">Every 2 weeks</string>
+    <string name="every_3_weeks">Every 3 weeks</string>
+    <string name="every_month">Every month</string>
+    <string name="every_10_days">Every 10 days</string>
+    <string name="deletion_confirm_title">Are you sure you want to delete this?</string>
+    <string name="deletion_confirm_body">If you do it accidentally, nothing bad happens. You will only have to create it again.</string>
+    <string name="done_at">"Done at "</string>
 </resources>

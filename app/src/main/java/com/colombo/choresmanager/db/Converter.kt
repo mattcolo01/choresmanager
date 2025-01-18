@@ -1,8 +1,11 @@
 package com.colombo.choresmanager.db
 
 import androidx.room.TypeConverter
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.util.Date
 
 class Converter {
@@ -25,5 +28,15 @@ class Converter {
     @TypeConverter
     fun localDateTimeToTimestamp(date: LocalDateTime?): Long? {
         return date?.toEpochSecond(ZoneOffset.UTC)
+    }
+
+    @TypeConverter
+    fun zonedDateTimeFromTimestamp(value: Long?): ZonedDateTime? {
+        return value?.let { ZonedDateTime.ofInstant(Instant.ofEpochSecond(it), ZoneId.systemDefault()) }
+    }
+
+    @TypeConverter
+    fun zonedDateTimeToTimestamp(date: ZonedDateTime?): Long? {
+        return date?.toEpochSecond()
     }
 }

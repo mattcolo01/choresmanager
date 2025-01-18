@@ -7,16 +7,23 @@ import com.colombo.choresmanager.MainApplication
 import com.colombo.choresmanager.model.Chore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 class ChoresOverviewViewModel : ViewModel() {
 
     private val choreDao = MainApplication.choreDatabase.getChoreDao()
     val choreList : LiveData<List<Chore>> = choreDao.getAllChores()
 
-    fun addChore(title: String, interval: Int) {
+    fun addChore(title: String, interval: Int, date: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            choreDao.addChore(Chore(name = title, intervalDays = interval, lastDoneAt = LocalDateTime.now()))
+            choreDao.addChore(Chore(
+                name = title,
+                intervalDays = interval,
+                lastDoneAt = ZonedDateTime.ofInstant(Instant.ofEpochSecond(date), ZoneOffset.systemDefault())
+            ))
         }
     }
 

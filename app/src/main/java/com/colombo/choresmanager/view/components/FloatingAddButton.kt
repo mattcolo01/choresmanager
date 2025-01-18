@@ -11,9 +11,9 @@ import androidx.compose.runtime.Composable
 fun FloatingAddButton(onClick: () -> Unit = {}) {
     FloatingActionButton(
         onClick = { onClick() },
-        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.secondary
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary
     ) {
-        Icon(Icons.Filled.Add, "Small floating action button.")
+        Icon(Icons.Filled.Add, "Add")
     }
 }

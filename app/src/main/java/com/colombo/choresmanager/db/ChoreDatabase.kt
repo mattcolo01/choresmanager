@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.colombo.choresmanager.model.Chore
 
-@Database(entities = [Chore::class], version = 3)
+@Database(entities = [Chore::class], version = 4)
 @TypeConverters(Converter::class)
 abstract class ChoreDatabase : RoomDatabase() {
 

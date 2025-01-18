@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gestione Faccende</string>
+    <string name="no_chores">Crea delle faccende per iniziare</string>
+    <string name="complete">Completa</string>
+    <string name="delete">Elimina</string>
+    <string name="create_chore">Crea una nuova faccenda</string>
+    <string name="name">Nome</string>
+    <string name="cancel">Annulla</string>
+    <string name="create">Crea</string>
+    <string name="required_fields">Si prega di compilare i campi obbligatori</string>
+    <string name="required_date">Si prega di selezionare una data</string>
+    <string name="ok">OK</string>
+    <string name="when_last_done">Quando l\'hai fatto l\'ultima volta?</string>
+    <string name="frequency">Frequenza</string>
+    <string name="every_day">Ogni giorno</string>
+    <string name="every_other_day">Ogni due giorni</string>
+    <string name="every_3_days">Ogni 3 giorni</string>
+    <string name="every_week">Ogni settimana</string>
+    <string name="every_2_weeks">Ogni 2 settimane</string>
+    <string name="every_3_weeks">Ogni 3 settimane</string>
+    <string name="every_month">Ogni mese</string>
+    <string name="every_10_days">Ogni 10 giorni</string>
+    <string name="deletion_confirm_title">Sei sicuro di volerlo eliminare?</string>
+    <string name="deletion_confirm_body">Se lo fai per sbaglio, non succede nulla di male. Dovrai soltanto ricrearlo.</string>
+    <string name="done_at">"Fatto il "</string>
+</resources>
