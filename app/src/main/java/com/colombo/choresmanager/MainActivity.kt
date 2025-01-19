@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.colombo.choresmanager.receivers.IntentReceiver
 import com.colombo.choresmanager.ui.theme.ChoresManagerTheme
 import com.colombo.choresmanager.utils.DEFAULT_CHANNEL_ID
+import com.colombo.choresmanager.utils.IntentActions
 import com.colombo.choresmanager.view.pages.ChoresOverviewPage
 import com.colombo.choresmanager.viewmodels.ChoresOverviewViewModel
 import com.colombo.choresmanager.viewmodels.ViewModelFactory
@@ -67,6 +68,10 @@ class MainActivity : ComponentActivity() {
                 mInterstitialAd = interstitialAd
             }
         })
+
+        intent?.let {
+            IntentActions.executeHandlerIfActionMatches(this, it)
+        }
     }
 
     private fun showInterstitialAd() {
@@ -113,6 +118,7 @@ class MainActivity : ComponentActivity() {
 
                 val intent = Intent(this, IntentReceiver::class.java)
                 intent.putExtra("choreId", id)
+                intent.putExtra("choreName", it.name)
                 val pendingIntent = PendingIntent.getBroadcast(
                     this,
                     id,

@@ -71,8 +71,8 @@ fun ChoreListItem(
     val backgroundColor by
         if (animateBackground)
             infiniteTransition.animateColor(
-                initialValue = MaterialTheme.colorScheme.surfaceContainerHigh,
-                targetValue = if (isFlashing) Color.Red else MaterialTheme.colorScheme.surfaceContainerHigh,
+                initialValue = cardDefaultBackground,
+                targetValue = if (isFlashing) Color.Red else cardDefaultBackground,
                 animationSpec = infiniteRepeatable(
                     animation = tween(1000),
                     repeatMode = RepeatMode.Reverse
@@ -84,8 +84,8 @@ fun ChoreListItem(
     val barColor by
         if (animateBar)
             infiniteTransition.animateColor(
-                initialValue = MaterialTheme.colorScheme.onSurface,
-                targetValue = if (isFlashing) Color.Red else MaterialTheme.colorScheme.onSurface,
+                initialValue = defaultBarColor,
+                targetValue = if (isFlashing) Color.Red else defaultBarColor,
                 animationSpec = infiniteRepeatable(
                     animation = tween(1000),
                     repeatMode = RepeatMode.Reverse
