@@ -34,7 +34,10 @@ fun IntervalDropdownField (
 
     ExposedDropdownMenuBox(
         expanded = intervalDropdownExpanded,
-        onExpandedChange = { intervalDropdownExpanded = it; onValueChange(choreInterval) },
+        onExpandedChange = {
+            intervalDropdownExpanded = it;
+            onValueChange(choreInterval)
+        },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
@@ -61,6 +64,7 @@ fun IntervalDropdownField (
                     onClick = {
                         choreInterval = value
                         intervalDropdownExpanded = false
+                        onValueChange(choreInterval)
                     }
                 )
             }

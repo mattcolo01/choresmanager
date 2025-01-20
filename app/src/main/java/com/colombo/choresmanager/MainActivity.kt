@@ -20,7 +20,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.colombo.choresmanager.receivers.IntentReceiver
 import com.colombo.choresmanager.ui.theme.ChoresManagerTheme
 import com.colombo.choresmanager.utils.DEFAULT_CHANNEL_ID
-import com.colombo.choresmanager.utils.IntentActions
 import com.colombo.choresmanager.view.pages.ChoresOverviewPage
 import com.colombo.choresmanager.viewmodels.ChoresOverviewViewModel
 import com.colombo.choresmanager.viewmodels.ViewModelFactory
@@ -68,10 +67,6 @@ class MainActivity : ComponentActivity() {
                 mInterstitialAd = interstitialAd
             }
         })
-
-        intent?.let {
-            IntentActions.executeHandlerIfActionMatches(this, it)
-        }
     }
 
     private fun showInterstitialAd() {
