@@ -1,6 +1,7 @@
 package com.colombo.choresmanager.view.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,7 +57,8 @@ fun IntervalDropdownField (
         ExposedDropdownMenu(
             expanded = intervalDropdownExpanded,
             onDismissRequest = { intervalDropdownExpanded = false },
-
+            modifier = Modifier
+                .height(230.dp)
         ) {
             getChoreIntervalOptions(context).forEach { (value, text) ->
                 DropdownMenuItem(

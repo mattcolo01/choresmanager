@@ -14,5 +14,8 @@ fun getChoreIntervalOptions (context: Context) : List<Pair<Int, String>> {
         Pair(14, getString(context, R.string.every_2_weeks)),
         Pair(21, getString(context, R.string.every_3_weeks)),
         Pair(30, getString(context, R.string.every_month)),
+        Pair(60, getString(context, R.string.every_2_months)),
+        Pair(180, getString(context, R.string.every_6_months)),
+        Pair(365, getString(context, R.string.every_year))
     )
 }

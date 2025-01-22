@@ -29,4 +29,7 @@
     <string name="almost_time_to">"A breve bisognerà fare "</string>
     <string name="dont_want_to">So che non vorresti farlo, ma devi. Mi dispiace.</string>
     <string name="snooze_default">Ricordamelo domani</string>
+    <string name="every_2_months">Ogni 2 mesi</string>
+    <string name="every_6_months">Ogni 6 mesi</string>
+    <string name="every_year">Ogni anno</string>
 </resources>

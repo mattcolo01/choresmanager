@@ -28,4 +28,7 @@
     <string name="almost_time_to">It\'s almost time to do</string>
     <string name="dont_want_to">I know you don\'t want to, but you have to. Sorry.</string>
     <string name="snooze_default">Remind me tomorrow</string>
+    <string name="every_2_months">Every 2 months</string>
+    <string name="every_6_months">Every 6 months</string>
+    <string name="every_year">Every year</string>
 </resources>
