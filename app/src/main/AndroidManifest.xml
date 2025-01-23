@@ -32,6 +32,10 @@
             android:name=".receivers.IntentReceiver"
             android:enabled="true" />
 
+        <service
+            android:name=".services.BroadcastService"
+            android:exported="false" />
+
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
