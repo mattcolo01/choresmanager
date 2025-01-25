@@ -19,8 +19,7 @@ class BroadcastService : LifecycleService() {
         if (intent != null) {
             val executed = executeHandlerIfActionMatches(intent)
 
-            if (executed) {
-            } else {
+            if (!executed) {
                 val choreId = intent.getIntExtra("choreId", -1)
                 val choreName = intent.getStringExtra("choreName") ?: ""
                 if (choreId > -1) {
@@ -57,9 +56,9 @@ class BroadcastService : LifecycleService() {
         val observableDao = dao.getChoreById(choreId)
 
         observableDao.observe(this) { chore ->
-            if (chore != null) {
-                observableDao.removeObservers(this)
+            observableDao.removeObservers(this)
 
+            if (chore != null) {
                 GlobalScope.launch(Dispatchers.IO) {
                     dao.updateLastDoneAt(choreId, java.time.LocalDateTime.now())
                 }

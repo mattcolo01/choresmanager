@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.colombo.choresmanager.R
@@ -139,12 +140,15 @@ fun ChoreListItem(
                     Text(
                         text = getChoreIntervalOptions(context).find { it.first == chore.intervalDays }?.second ?: "",
                         fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.surfaceTint
+                        color = MaterialTheme.colorScheme.surfaceTint,
+                        modifier = Modifier.weight(1f)
                     )
                     Text(
                         text = stringResource(R.string.done_at) + chore.lastDoneAt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                         fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.surfaceTint
+                        color = MaterialTheme.colorScheme.surfaceTint,
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.weight(1f)
                     )
                 }
             }
