@@ -1,5 +1,6 @@
 package com.colombo.choresmanager.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -169,6 +170,5 @@ class ChoresOverviewViewModel : ViewModel() {
         return idWhenCompleted
     }
 
-    fun getChore(id: Int): LiveData<Chore?> = currentStrategy.getChore(id)
+fun getChore(id: Int): LiveData<Chore?> = currentStrategy.getChore(id)
 }
-import android.util.Log
