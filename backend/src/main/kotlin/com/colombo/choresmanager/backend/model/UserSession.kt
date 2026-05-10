@@ -16,5 +16,5 @@ class UserSession(
     var userId: Long = 0,
 
     @Column(nullable = false)
-    var expiresAt: ZonedDateTime = ZonedDateTime.now(),
+    var expiresAt: ZonedDateTime = ZonedDateTime.now().plusDays(30),
 )

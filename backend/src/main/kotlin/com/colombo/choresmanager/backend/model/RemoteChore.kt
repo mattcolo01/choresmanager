@@ -32,5 +32,5 @@ class RemoteChore(
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    var owner: AppUser = AppUser(),
+    var owner: AppUser? = null,
 )

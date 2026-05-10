@@ -2,6 +2,7 @@ package com.colombo.choresmanager.auth
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
@@ -17,7 +18,8 @@ class UserProfileStore(context: Context) {
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
         )
-    } catch (_: Exception) {
+    } catch (exception: Exception) {
+        Log.w("UserProfileStore", "Encrypted storage unavailable, fallback to plain preferences", exception)
         context.getSharedPreferences("profiles", Context.MODE_PRIVATE)
     }
 
