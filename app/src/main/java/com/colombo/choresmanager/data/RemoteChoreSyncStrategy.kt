@@ -8,6 +8,7 @@ import com.colombo.choresmanager.network.ChoresApi
 import com.colombo.choresmanager.network.CompleteChoreRequest
 import com.colombo.choresmanager.network.CreateChoreRequest
 import com.colombo.choresmanager.network.toDomain
+import java.io.IOException
 import java.time.ZonedDateTime
 
 class RemoteChoreSyncStrategy(
@@ -21,7 +22,8 @@ class RemoteChoreSyncStrategy(
     }
 
     private fun authHeader(): String {
-        return "Bearer ${token ?: error("Missing auth token for remote strategy")}"
+        val currentToken = token ?: throw IOException("Missing auth token")
+        return "Bearer $currentToken"
     }
 
     override fun observeChores(): LiveData<List<Chore>> = choreCache

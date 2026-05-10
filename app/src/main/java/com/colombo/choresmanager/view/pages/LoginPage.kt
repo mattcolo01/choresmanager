@@ -119,9 +119,9 @@ fun LoginPage(
             CircularProgressIndicator()
         }
 
-        if (!authError.isNullOrBlank()) {
+        authError?.takeIf { it.isNotBlank() }?.let {
             Text(
-                text = authError!!,
+                text = it,
                 color = MaterialTheme.colorScheme.error,
             )
         }

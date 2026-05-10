@@ -17,6 +17,8 @@ import com.colombo.choresmanager.network.AuthRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -109,8 +111,17 @@ class ChoresOverviewViewModel : ViewModel() {
                 }
                 remoteStrategy.refresh()
                 _showLoginScreen.postValue(false)
+            } catch (exception: HttpException) {
+                val message = when (exception.code()) {
+                    401 -> "Invalid username or password"
+                    409 -> "Username already in use"
+                    else -> "Authentication failed"
+                }
+                _authError.postValue(message)
+            } catch (_: IOException) {
+                _authError.postValue("Cannot reach backend server")
             } catch (_: Exception) {
-                _authError.postValue("Unable to authenticate with server")
+                _authError.postValue("Authentication failed")
             } finally {
                 _isAuthLoading.postValue(false)
             }
