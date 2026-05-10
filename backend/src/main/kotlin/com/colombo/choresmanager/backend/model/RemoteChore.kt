@@ -13,24 +13,24 @@ import java.time.ZonedDateTime
 
 @Entity
 @Table(name = "chores")
-class RemoteChore(
+class RemoteChore {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
+    var id: Long = 0
 
     @Column(nullable = false)
-    var name: String = "",
+    var name: String = ""
 
     @Column(nullable = false)
-    var intervalDays: Int = 1,
+    var intervalDays: Int = 1
 
     @Column(nullable = false)
-    var lastDoneAt: ZonedDateTime = ZonedDateTime.now(),
+    var lastDoneAt: ZonedDateTime = ZonedDateTime.now()
 
     @Column(nullable = false)
-    var createdAt: ZonedDateTime = ZonedDateTime.now(),
+    var createdAt: ZonedDateTime = ZonedDateTime.now()
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    var owner: AppUser? = null,
-)
+    lateinit var owner: AppUser
+}

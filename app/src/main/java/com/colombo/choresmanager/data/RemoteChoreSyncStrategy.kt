@@ -8,7 +8,6 @@ import com.colombo.choresmanager.network.ChoresApi
 import com.colombo.choresmanager.network.CompleteChoreRequest
 import com.colombo.choresmanager.network.CreateChoreRequest
 import com.colombo.choresmanager.network.toDomain
-import java.io.IOException
 import java.time.ZonedDateTime
 
 class RemoteChoreSyncStrategy(
@@ -22,7 +21,7 @@ class RemoteChoreSyncStrategy(
     }
 
     private fun authHeader(): String {
-        val currentToken = token ?: throw IOException("Missing auth token")
+        val currentToken = token ?: throw IllegalStateException("Missing auth token")
         return "Bearer $currentToken"
     }
 

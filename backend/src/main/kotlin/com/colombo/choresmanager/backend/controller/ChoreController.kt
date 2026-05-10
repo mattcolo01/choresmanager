@@ -30,7 +30,7 @@ class ChoreController(
 ) {
     @GetMapping
     fun list(@AuthenticationPrincipal principal: UserPrincipal): List<ChoreResponse> {
-        return choreRepository.findAllByOwnerIdOrderByCreatedAtAsc(principal.userId)
+        return choreRepository.findAllByOwner_IdOrderByCreatedAtAsc(principal.userId)
             .map { it.toResponse() }
     }
 
@@ -42,15 +42,14 @@ class ChoreController(
         val owner = userRepository.findById(principal.userId)
             .orElseThrow { ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid user") }
 
-        return choreRepository.save(
-            RemoteChore(
-                name = request.name,
-                intervalDays = request.intervalDays,
-                lastDoneAt = request.lastDoneAt,
-                createdAt = ZonedDateTime.now(),
-                owner = owner,
-            ),
-        ).toResponse()
+        val chore = RemoteChore().apply {
+            name = request.name
+            intervalDays = request.intervalDays
+            lastDoneAt = request.lastDoneAt
+            createdAt = ZonedDateTime.now()
+            this.owner = owner
+        }
+        return choreRepository.save(chore).toResponse()
     }
 
     @PostMapping("/{id}/complete")
@@ -59,7 +58,7 @@ class ChoreController(
         @PathVariable id: Long,
         @Valid @RequestBody request: CompleteChoreRequest,
     ): ChoreResponse {
-        val chore = choreRepository.findByIdAndOwnerId(id, principal.userId)
+        val chore = choreRepository.findByIdAndOwner_Id(id, principal.userId)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Chore not found")
         chore.lastDoneAt = request.completedAt
         return choreRepository.save(chore).toResponse()
@@ -71,7 +70,7 @@ class ChoreController(
         @AuthenticationPrincipal principal: UserPrincipal,
         @PathVariable id: Long,
     ) {
-        val chore = choreRepository.findByIdAndOwnerId(id, principal.userId)
+        val chore = choreRepository.findByIdAndOwner_Id(id, principal.userId)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Chore not found")
         choreRepository.delete(chore)
     }

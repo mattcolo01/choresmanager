@@ -47,6 +47,7 @@ class ChoresOverviewViewModel : ViewModel() {
 
     private val _isAuthLoading = MutableLiveData(false)
     val isAuthLoading: LiveData<Boolean> = _isAuthLoading
+    private val logTag = "ChoresOverviewVM"
 
     init {
         switchStrategy(localStrategy)
@@ -88,7 +89,11 @@ class ChoresOverviewViewModel : ViewModel() {
 
     private fun authenticate(username: String, password: String, register: Boolean) {
         if (username.isBlank() || password.isBlank()) {
-            _authError.value = "Username and password are required"
+            _authError.value = when {
+                username.isBlank() && password.isBlank() -> "Username and password are required"
+                username.isBlank() -> "Username is required"
+                else -> "Password is required"
+            }
             return
         }
         _isAuthLoading.value = true
@@ -120,7 +125,8 @@ class ChoresOverviewViewModel : ViewModel() {
                 _authError.postValue(message)
             } catch (_: IOException) {
                 _authError.postValue("Cannot reach backend server")
-            } catch (_: Exception) {
+            } catch (exception: Exception) {
+                Log.e(logTag, "Authentication request failed", exception)
                 _authError.postValue("Authentication failed")
             } finally {
                 _isAuthLoading.postValue(false)
@@ -165,3 +171,4 @@ class ChoresOverviewViewModel : ViewModel() {
 
     fun getChore(id: Int): LiveData<Chore?> = currentStrategy.getChore(id)
 }
+import android.util.Log
