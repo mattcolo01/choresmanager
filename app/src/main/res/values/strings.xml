@@ -31,4 +31,13 @@
     <string name="every_2_months">Every 2 months</string>
     <string name="every_6_months">Every 6 months</string>
     <string name="every_year">Every year</string>
+    <string name="login_title">Sign in to sync chores</string>
+    <string name="select_profile">Choose a profile</string>
+    <string name="profile_guest">Guest</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="create_account">Create account</string>
+    <string name="continue_as_guest">Continue as guest</string>
+    <string name="switch_account">Switch account</string>
 </resources>

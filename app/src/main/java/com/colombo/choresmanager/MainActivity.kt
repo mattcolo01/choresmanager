@@ -15,12 +15,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.colombo.choresmanager.auth.SessionMode
 import com.colombo.choresmanager.receivers.IntentReceiver
 import com.colombo.choresmanager.ui.theme.ChoresManagerTheme
 import com.colombo.choresmanager.utils.DEFAULT_CHANNEL_ID
 import com.colombo.choresmanager.view.pages.ChoresOverviewPage
+import com.colombo.choresmanager.view.pages.LoginPage
 import com.colombo.choresmanager.viewmodels.ChoresOverviewViewModel
 import com.colombo.choresmanager.viewmodels.ViewModelFactory
 import com.google.android.gms.ads.AdRequest
@@ -41,11 +45,22 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ChoresManagerTheme {
-                    ChoresOverviewPage(
-                        choresOverviewViewModel!!,
-                        this::showInterstitialAd,
-                        this::scheduleNotificationForChore
-                    )
+                val showLoginScreen by choresOverviewViewModel!!.showLoginScreen.observeAsState(true)
+                val sessionMode by choresOverviewViewModel!!.sessionMode.observeAsState(SessionMode.Guest)
+                if (showLoginScreen) {
+                    LoginPage(choresOverviewViewModel!!)
+                } else {
+                    when (sessionMode) {
+                        is SessionMode.Authenticated, SessionMode.Guest -> {
+                            ChoresOverviewPage(
+                                choresOverviewViewModel!!,
+                                this::showInterstitialAd,
+                                this::scheduleNotificationForChore,
+                                onSwitchAccount = { choresOverviewViewModel!!.logoutToLoginScreen() },
+                            )
+                        }
+                    }
+                }
             }
         }
 
@@ -109,6 +124,10 @@ class MainActivity : ComponentActivity() {
             choreId.removeObservers(this)
             val sub = choresOverviewViewModel!!.getChore(id)
             sub.observe(this) {
+                if (it == null) {
+                    sub.removeObservers(this)
+                    return@observe
+                }
                 sub.removeObservers(this)
 
                 val intent = Intent(this, IntentReceiver::class.java)

@@ -10,13 +10,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -40,11 +43,13 @@ import com.colombo.choresmanager.view.components.dialogs.DeletionConfirmDialog
 import com.colombo.choresmanager.viewmodels.ChoresOverviewViewModel
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChoresOverviewPage(
     viewModel: ChoresOverviewViewModel,
     showInterstitialAd: () -> Unit,
-    scheduleNotificationForChore: (MutableLiveData<Int>) -> Unit
+    scheduleNotificationForChore: (MutableLiveData<Int>) -> Unit,
+    onSwitchAccount: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -54,6 +59,16 @@ fun ChoresOverviewPage(
     val choreFlaggedForDeletion = remember { mutableIntStateOf(-1) }
 
     Scaffold (
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.app_name)) },
+                actions = {
+                    TextButton(onClick = onSwitchAccount) {
+                        Text(text = stringResource(R.string.switch_account))
+                    }
+                },
+            )
+        },
         floatingActionButton = { FloatingAddButton(onClick = {
             openCreationDialog.value = true
         }) },

@@ -80,4 +80,9 @@ dependencies {
     annotationProcessor(libs.androidx.room.compiler)
 
     implementation(libs.play.services.ads)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
+    implementation(libs.okhttp.logging)
+    implementation(libs.gson)
+    implementation(libs.androidx.security.crypto)
 }

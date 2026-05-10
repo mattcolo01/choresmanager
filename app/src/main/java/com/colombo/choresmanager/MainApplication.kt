@@ -12,11 +12,13 @@ import kotlinx.coroutines.launch
 class MainApplication : Application() {
 
     companion object {
+        lateinit var instance: MainApplication
         lateinit var choreDatabase: ChoreDatabase
     }
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         choreDatabase = Room.databaseBuilder(
             applicationContext, ChoreDatabase::class.java, "chores-database"
         ).fallbackToDestructiveMigration().build()
